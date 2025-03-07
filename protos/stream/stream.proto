@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package stream;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/jnis23/grpc-gateway-proxy-example/protos/stream";
+
+service StreamService {
+    rpc Stream (StreamRequest) returns (stream StreamResponse) {
+        option (google.api.http) = {
+            get: "/stream/{id}"
+        };
+    };
+
+    rpc EmptyStream (google.protobuf.Empty) returns (stream StreamResponse) {
+        option (google.api.http) = {
+            post: "/stream/empty"
+            body: "*"
+        };
+    };
+
+    rpc Blocker(google.protobuf.Empty) returns (stream StreamResponse) {
+        option (google.api.http) = {
+            post: "/stream/blocker"
+        };
+    };
+}
+
+message StreamRequest {
+    uint32 id = 1;
+}
+
+message StreamResponse {
+    uint32 id = 1;
+    string message = 2;
+}
