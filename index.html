@@ -39,6 +39,10 @@
 <body>
     <h1>WebSocket Test</h1>
     
+    <select id="urlSelect">
+        <option value="ws://localhost:8080/stream/blocker?method=POST">Broken</option>
+        <option value="ws://localhost:8080/stream/empty?method=POST">Working</option>
+    </select>
     <div class="controls">
         <button id="connectBtn">Connect to WebSocket</button>
         <button id="sendBodyBtn">Send Body</button>
@@ -60,6 +64,8 @@
         const connectionStatus = document.getElementById('connectionStatus');
         const statusDiv = document.getElementById('status');
         const sendBodyBtn = document.getElementById('sendBodyBtn');
+        const urlSelect = document.getElementById('urlSelect');
+
         
         // WebSocket instance
         let socket = null;
@@ -74,7 +80,7 @@
         
         // Connect to WebSocket
         connectBtn.addEventListener('click', () => {
-            const wsUrl = 'ws://localhost:8080/stream/empty?method=POST';
+            const wsUrl = urlSelect.value;
             
             try {
                 socket = new WebSocket(wsUrl);
@@ -115,7 +121,7 @@
         // Send an empty body over ws
         sendBodyBtn.addEventListener('click', () => {
             if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify({}));
+                socket.send(JSON.stringify({s: 'test'}));
                 console.log('Sent empty body');
             } else {
                 log('No active connection to send body');
@@ -130,7 +136,7 @@
             } else {
                 log('No active connection to close');
             }
-        });
+        });        
     </script>
 </body>
 </html>
