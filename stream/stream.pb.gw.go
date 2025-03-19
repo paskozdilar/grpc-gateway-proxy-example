@@ -71,6 +71,7 @@ func request_StreamService_EmptyStream_0(ctx context.Context, marshaler runtime.
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
+	go io.Copy(io.Discard, req.Body)
 	stream, err := client.EmptyStream(ctx, &protoReq)
 	if err != nil {
 		return nil, metadata, err
