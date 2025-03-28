@@ -40,8 +40,8 @@
     <h1>WebSocket Test</h1>
     
     <select id="urlSelect">
-        <option value="ws://localhost:8080/stream/blocker?method=POST">Broken</option>
-        <option value="ws://localhost:8080/stream/empty?method=POST">Working</option>
+        <option value="ws://localhost:8080/stream/blocker?method=POST&methodType=ServerStreaming&body=false">Broken</option>
+        <option value="ws://localhost:8080/stream/empty?method=POST&methodType=ServerStreaming">Working</option>
     </select>
     <div class="controls">
         <button id="connectBtn">Connect to WebSocket</button>

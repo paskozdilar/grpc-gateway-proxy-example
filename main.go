@@ -6,9 +6,11 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/jnis23/grpc-gateway-proxy-example/stream"
+	"github.com/sirupsen/logrus"
 	"github.com/tmc/grpc-websocket-proxy/wsproxy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -38,7 +40,11 @@ func runHttpGateway() {
 		http.ServeFile(w, r, "index.html")
 	})
 
-	ws := wsproxy.WebsocketProxy(mux)
+	ws := wsproxy.WebsocketProxy(mux, wsproxy.WithLogger(&logrus.Logger{
+		Level:     logrus.DebugLevel,
+		Out:       os.Stderr,
+		Formatter: &logrus.TextFormatter{},
+	}))
 	if err := http.ListenAndServe(":8080", ws); err != nil {
 		log.Fatalf("gateway server failed: %v", err)
 	}
